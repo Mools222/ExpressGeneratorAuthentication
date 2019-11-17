@@ -1,0 +1,25 @@
+doctype html
+html
+    head
+        title #{title} | #{page}
+        link(rel='stylesheet', href='/stylesheets/style.css')
+    body
+        // Header
+        .header
+            h1 Welcome To #{title}
+            p Enjoy Your Stay
+        // Navbar
+        - var navbar = { 'Start': '/', 'Dummy1': '/', 'Dummy2': '/', 'Dummy3': '/'};
+        ul
+            each val, key in navbar
+                li
+                    if key === page
+                        a.active(href=val)= key
+                    else
+                        a(href=val)= key
+        // Content
+        block content
+        // Footer
+        .footer
+            p Copyright 1989-2019 by Morten Olsen. All Rights Reserved.
+            p This website was made using IntelliJ IDEA 2019.2.4 (Ultimate Edition).

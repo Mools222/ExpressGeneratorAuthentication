@@ -1,0 +1,32 @@
+extends layout
+
+block content
+    // 1 row containing 3 columns
+    .row
+        // Left column
+        include sideLeft
+        // Middle column
+        .middle
+            if user
+                h1 You are logged in!
+                form(action='/logout', method='get')
+                    input(type='submit', value='Log out')
+            else
+                h1 Log in
+                form(action='/', method='post')
+                    h2 User name:
+                    br
+                    input(type='text', name='login', value='')
+                    br
+                    h2 Password:
+                    br
+                    input(type='text', name='password', value='')
+                    br
+                    br
+                    p No account?&nbsp;
+                        a(href='/create') Create one!
+                    input(type='submit', value='Submit')
+                    if error
+                        p#error= error
+        // Right column
+        include sideRight

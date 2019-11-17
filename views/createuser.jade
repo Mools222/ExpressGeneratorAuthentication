@@ -1,0 +1,27 @@
+extends layout
+
+block content
+    // 1 row containing 3 columns
+    .row
+        // Left column
+        include sideLeft
+        // Middle column
+        .middle
+            h1 Create new user:
+            form(action='/create', method='post')
+                h2 User name:
+                br
+                input(type='text', name='login', value='')
+                br
+                h2 Password:
+                br
+                input(type='text', name='password', value='')
+                br
+                br
+                input(type='submit', value='Create')
+                if error
+                    p#error= error
+                if success
+                    p#success= success
+        // Right column
+        include sideRight

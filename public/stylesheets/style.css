@@ -1,0 +1,199 @@
+/**********************************************************************************/
+/* Style the entire body */
+/**********************************************************************************/
+
+* {
+    box-sizing: border-box; /* If you set box-sizing: border-box; padding and border are included in the width and height */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/**********************************************************************************/
+/* Header */
+/**********************************************************************************/
+
+/* Style the header */
+.header {
+    padding: 20px;
+    text-align: center;
+    background: radial-gradient(circle, green 0%, #4CAF50 100%);
+    color: white;
+}
+
+/* Style the header text */
+.header h1 {
+    font-size: 2.5em;
+    margin: 15px;
+}
+
+.header p {
+    font-size: 1.5em;
+    margin: 10px;
+}
+
+/**********************************************************************************/
+/* Navbar */
+/**********************************************************************************/
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: darkgray;
+    top: 0;
+
+    display: flex;
+    flex-wrap: wrap;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: green;
+}
+
+.active {
+    background-color: green;
+}
+
+/**********************************************************************************/
+/* Column container */
+/**********************************************************************************/
+
+.row {
+    display: flex;
+
+    flex: 1;
+}
+
+/**********************************************************************************/
+/* Create 3 unequal columns that sit next to each other */
+/**********************************************************************************/
+
+/* 2 side columns */
+.side {
+    flex: 25%;
+    background-color: #f1f1f1;
+    padding: 20px;
+}
+
+/* 1 middle column */
+.middle {
+    flex: 50%;
+    background-color: white;
+    padding: 20px;
+}
+
+/**********************************************************************************/
+/* Middle column */
+/**********************************************************************************/
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type=text] {
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 12px 20px 12px 40px;
+}
+
+input[type=button], input[type=submit], input[type=reset] {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    cursor: pointer;
+    width: 35%;
+    margin: 10px 0 10px auto;
+    font-size: 16px;
+}
+
+#error {
+    color: red;
+}
+
+#success {
+    color: blue;
+}
+
+
+/**********************************************************************************/
+/* Right column */
+/**********************************************************************************/
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    width: 80%;
+    border-radius: 5px;
+
+    word-wrap: break-word;
+    margin: auto;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+img {
+    border-radius: 5px 5px 0 0;
+}
+
+.fakeImage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 20vh;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.container {
+    padding: 2px 16px;
+}
+
+/**********************************************************************************/
+/* Footer */
+/**********************************************************************************/
+
+.footer {
+    padding: 20px;
+    text-align: center;
+    background: #ddd;
+}
+
+.footer p {
+    margin: 10px;
+}
+
+/**********************************************************************************/
+/* Responsive layout
+/**********************************************************************************/
+
+/*When the screen is less than 800px wide, stack the 3 columns on top of each other and change the layout of the nav-bar to vertical */
+@media screen and (max-width: 800px) {
+    /* Media query */
+    .row {
+        flex-direction: column;
+    }
+}
