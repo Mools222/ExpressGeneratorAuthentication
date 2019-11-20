@@ -9,7 +9,10 @@ html
             h1 Welcome To #{title}
             p Enjoy Your Stay
         // Navbar
-        - var navbar = { 'Start': '/', 'Dummy1': '/', 'Dummy2': '/', 'Dummy3': '/'};
+        if user
+            - var navbar = { 'Start': '/', 'Dummy1': '/', 'Dummy2': '/', 'Dummy3': '/', "Account": "/account"};
+        else
+            - var navbar = { 'Start': '/', 'Dummy1': '/', 'Dummy2': '/', 'Dummy3': '/', "Register": "/create"};
         ul
             each val, key in navbar
                 li

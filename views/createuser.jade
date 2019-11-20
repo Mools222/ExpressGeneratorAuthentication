@@ -8,7 +8,7 @@ block content
         // Middle column
         .middle
             h1 Create new user:
-            form(action='/create', method='post')
+            form(action='/create', method='post', enctype="multipart/form-data")
                 h2 User name:
                 br
                 input(type='text', name='login', value='')
@@ -16,6 +16,10 @@ block content
                 h2 Password:
                 br
                 input(type='text', name='password', value='')
+                br
+                h2 Upload avatar:
+                br
+                input(type='file', name='avatar', accept=".png, .jpg, .jpeg")
                 br
                 br
                 input(type='submit', value='Create')

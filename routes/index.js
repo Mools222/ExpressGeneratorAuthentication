@@ -2,11 +2,21 @@ var express = require('express');
 var router = express.Router();
 
 // [Import fs]
-let fs = require('fs');
+let fs = require('fs').promises;
 
 // [Import bcrypt]
 let bcrypt = require('bcrypt');
-const saltRounds = 4;
+const SALT_ROUNDS = 10;
+
+// [Import multer]
+const multer = require('multer');
+const upload = multer({
+    dest: '../public/images',
+    limits: {
+        fileSize: 4 * 1024 * 1024, // [max file size = 4 mb]
+    },
+});
+
 
 // Get homepage
 router.get('/', function (req, res, next) {
@@ -28,16 +38,16 @@ router.get('/', function (req, res, next) {
 });
 
 // Handle logins
-router.post('/', function (req, res, next) {
+router.post('/', async function (req, res, next) {
     console.log(req.body);
 
-    let login = checkLogin(req.body.login, req.body.password); // "login" is undefined if no such login is found - Otherwise the login object (which contains the user name and password) is returned
+    let userObject = await checkLogin(req.body.login, req.body.password); // "login" is undefined if no such login is found - Otherwise the login object (which contains the user name and password) is returned
 
-    if (login) { // If the login is undefined, it is converted to false. If it contains something, it is converted to true (https://www.w3schools.com/js/js_type_conversion.asp)
+    if (userObject) { // If the login is undefined, it is converted to false. If it contains something, it is converted to true (https://www.w3schools.com/js/js_type_conversion.asp)
         console.log(`User logged in. User name: "${req.body.login}". Password: "${req.body.password}".`);
 
         // Save user to session
-        req.session.user = {userName: req.body.login, password: req.body.password};
+        req.session.user = {userName: userObject.login, password: userObject.password, avatar: userObject.avatar};
 
         // Redirect
         res.status(200).redirect('/');
@@ -47,6 +57,22 @@ router.post('/', function (req, res, next) {
         res.render('index', {error: "Error: Wrong user name and/or password."})
     }
 });
+
+// Show account details
+router.get('/account', function (req, res, next) {
+    if (req.session.user) {
+        res.render('account', {
+            page: 'Account',
+            user: req.session.user.userName,
+            password: req.session.user.password,
+            avatar: req.session.user.avatar,
+            expirationDate: req.session.cookie._expires
+        });
+    } else {
+        res.render('index', {page: 'Start'});
+    }
+});
+
 
 // Handle logouts
 router.get('/logout', function (req, res, next) {
@@ -58,39 +84,43 @@ router.get('/logout', function (req, res, next) {
 
 // Get create user page
 router.get('/create', function (req, res, next) {
-    res.render('createuser', {page: 'Create New User'});
+    if (req.session.user)
+        return res.status(200).redirect('/');
+
+    return res.render('createuser', {page: 'Register'});
 });
 
 // Handle create user request
-router.post('/create', function (req, res, next) {
+router.post('/create', upload.single('avatar'), async function (req, res, next) {
     console.log(req.body);
 
-    let userCreated = createNewUser(req.body.login, req.body.password);
+    let userCreated = await createNewUser(req.body.login, req.body.password, req.file.path);
 
     if (userCreated === "User created.") {
-        // res.status(200).redirect('/');
-        res.render('createuser', {page: 'Create New User', success: "Success: " + userCreated});
+        // res.redirect('/create?success=true');
+        res.render('createuser', {page: 'Register', success: "Success: " + userCreated});
     } else {
-        res.render('createuser', {page: 'Create New User', error: userCreated});
+        // res.redirect('/create?success=false');
+        res.render('createuser', {page: 'Register', error: userCreated});
     }
 });
 
-function checkLogin(userName, password) {
-    let data = fs.readFileSync("../logins.json");
+async function checkLogin(userName, password) {
+    let data = await fs.readFile("../logins.json");
 
     let loginsArray = JSON.parse(data);
 
     for (let i = 0; i < loginsArray.length; i++) {
-        if (loginsArray[i].login === userName && bcrypt.compareSync(password, loginsArray[i].password))
+        if (loginsArray[i].login === userName && await bcrypt.compare(password, loginsArray[i].password))
             return loginsArray[i];
     }
 }
 
-function createNewUser(userName, password) {
+async function createNewUser(userName, password, avatarFilePath) {
     if (userName.length < 1)
         return "User name must be over 1 character long.";
 
-    let data = fs.readFileSync("../logins.json");
+    let data = await fs.readFile("../logins.json");
     let loginsArray = JSON.parse(data);
 
     for (let i = 0; i < loginsArray.length; i++) {
@@ -99,11 +129,28 @@ function createNewUser(userName, password) {
     }
 
     // Hash password
-    password = bcrypt.hashSync(password, saltRounds);
+    password = await bcrypt.hash(password, SALT_ROUNDS);
 
-    loginsArray.push({login: userName, password: password});
-    fs.writeFileSync("../logins.json", JSON.stringify(loginsArray));
+    console.log(avatarFilePath.slice(10));
+
+    loginsArray.push({
+        id: loginsArray.length + 1,
+        login: userName,
+        password: password,
+        avatar: avatarFilePath.slice(10)
+    });
+    await fs.writeFile("../logins.json", JSON.stringify(loginsArray));
     return "User created.";
+}
+
+async function getUserById(userId) {
+    let data = await fs.readFile("../logins.json");
+    let loginsArray = JSON.parse(data);
+
+    for (let i = 0; i < loginsArray.length; i++) {
+        if (loginsArray[i].id === userId)
+            return loginsArray[i];
+    }
 }
 
 module.exports = router;

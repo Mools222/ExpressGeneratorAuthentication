@@ -28,7 +28,7 @@ let session = require('express-session');
 // app.use(session({secret: "super secret string 321", cookie: {maxAge: 30000}}));
 app.use(session({
     secret: "super secret string 321",
-    resave: false,
+    resave: true,
     saveUninitialized: false,
     cookie: {maxAge: 30000}
 }));

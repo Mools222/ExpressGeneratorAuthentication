@@ -1,0 +1,23 @@
+extends layout
+
+block content
+    // 1 row containing 3 columns
+    .row
+        // Left column
+        include sideLeft
+        // Middle column
+        .middle
+            if user
+                h1 My Account
+                .card
+                    if avatar
+                        img#avatarImage(src=avatar, alt='Avatar')
+                    else
+                        img#avatarImage(src='images/avatar.png', alt='Avatar')
+                    .container
+                        h2
+                            b User: #{user}
+                        p Password: #{password}
+                        p Cookie expires: #{expirationDate}
+        // Right column
+        include sideRight
