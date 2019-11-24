@@ -94,7 +94,7 @@ router.get('/create', function (req, res, next) {
 router.post('/create', upload.single('avatar'), async function (req, res, next) {
     console.log(req.body);
 
-    let userCreated = await createNewUser(req.body.login, req.body.password, req.file.path);
+    let userCreated = await createNewUser(req.body.login, req.body.password, (req.file ? req.file.path : null));
 
     if (userCreated === "User created.") {
         // res.redirect('/create?success=true');
@@ -131,13 +131,11 @@ async function createNewUser(userName, password, avatarFilePath) {
     // Hash password
     password = await bcrypt.hash(password, SALT_ROUNDS);
 
-    console.log(avatarFilePath.slice(10));
-
     loginsArray.push({
         id: loginsArray.length + 1,
         login: userName,
         password: password,
-        avatar: avatarFilePath.slice(10)
+        avatar: (avatarFilePath ? avatarFilePath.slice(10) : null)
     });
     await fs.writeFile("../logins.json", JSON.stringify(loginsArray));
     return "User created.";

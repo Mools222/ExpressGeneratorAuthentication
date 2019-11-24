@@ -1,1 +1,20 @@
-[{"id":1,"login":"admin","password":"$2b$10$JAPsW5ndAI.vOKbudeVMXeuxceEfkjuyPDnhNjwqpUWaEOXQ13SA."},{"id":2,"login":"Mickey","password":"$2b$10$/UDFdZb5pQ6aYm2j24ToxOh5cwJuj0ksTh3nFIdeYxBXkDJMjnbnS","avatar":"images\\07a4db74e28a74fd69f70deac154b9af"},{"id":3,"login":"hello","password":"$2b$10$e.ddpauNM10v/oSlABmlN.4F8Ww8j6uaFS1EijqqSv1eX5KsVEeIO","avatar":"images\\47aa00d3c15bbdd126cae0fefb000353"}]
+[
+  {
+    "id": 1,
+    "login": "admin",
+    "password": "$2b$10$JAPsW5ndAI.vOKbudeVMXeuxceEfkjuyPDnhNjwqpUWaEOXQ13SA.",
+    "avatar": null
+  },
+  {
+    "id": 2,
+    "login": "Mickey",
+    "password": "$2b$10$/UDFdZb5pQ6aYm2j24ToxOh5cwJuj0ksTh3nFIdeYxBXkDJMjnbnS",
+    "avatar": "images\\07a4db74e28a74fd69f70deac154b9af"
+  },
+  {
+    "id": 3,
+    "login": "hello",
+    "password": "$2b$10$e.ddpauNM10v/oSlABmlN.4F8Ww8j6uaFS1EijqqSv1eX5KsVEeIO",
+    "avatar": "images\\47aa00d3c15bbdd126cae0fefb000353"
+  }
+]
