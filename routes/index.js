@@ -17,24 +17,29 @@ const upload = multer({
     },
 });
 
+function redirectIfLoggedIn(req, res, next) {
+    if (req.session.user)
+        return next();
+    return res.render('index', {page: 'Start'});
+}
 
 // Get homepage
-router.get('/', function (req, res, next) {
+router.get('/', redirectIfLoggedIn, function (req, res, next) {
     // console.log('Cookies: ' + req.cookies);
     // console.log('Cookies connect.sid: ' + req.cookies["connect.sid"]);
     // console.log('Sessions id: ' + req.session.id);
     // console.log('Sessions cookie expires: ' + req.session.cookie._expires);
 
-    if (req.session.user) {
+    // if (req.session.user) {
         res.render('index', {
             page: 'Start',
             user: req.session.user.userName,
             password: req.session.user.password,
             expirationDate: req.session.cookie._expires
         });
-    } else {
-        res.render('index', {page: 'Start'});
-    }
+    // } else {
+    //     res.render('index', {page: 'Start'});
+    // }
 });
 
 // Handle logins
@@ -59,8 +64,8 @@ router.post('/', async function (req, res, next) {
 });
 
 // Show account details
-router.get('/account', function (req, res, next) {
-    if (req.session.user) {
+router.get('/account', redirectIfLoggedIn, function (req, res, next) {
+    // if (req.session.user) {
         res.render('account', {
             page: 'Account',
             user: req.session.user.userName,
@@ -68,15 +73,15 @@ router.get('/account', function (req, res, next) {
             avatar: req.session.user.avatar,
             expirationDate: req.session.cookie._expires
         });
-    } else {
-        res.render('index', {page: 'Start'});
-    }
+    // } else {
+    //     res.status(200).redirect('/');
+    // }
 });
 
 
 // Handle logouts
 router.get('/logout', function (req, res, next) {
-    req.session.destroy(function () {
+    req.session.destroy(function (err) {
         console.log("User logged out.")
     });
     res.status(200).redirect('/');
